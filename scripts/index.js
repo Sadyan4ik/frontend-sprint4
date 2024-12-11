@@ -1,13 +1,7 @@
+
+
 // @todo: Темплейт карточки
-
-// @todo: DOM узлы
-
-// @todo: Функция создания карточки
-
-// @todo: Функция удаления карточки
-
-// @todo: Вывести карточки на страницу
-
+const cardTemplate = document.querySelector('#card-template').content;
 
 // @todo: DOM узлы
 const editButton = document.querySelector('.profile__edit-button');
@@ -19,18 +13,14 @@ const descriptionInput = profilePopup.querySelector('.popup__input_type_descript
 const profileTitle = document.querySelector('.profile__title');
 const profileDescription = document.querySelector('.profile__description');
 
-
-// Получаем элементы из DOM
 const addButton = document.querySelector('.profile__add-button');
 const newCardPopup = document.querySelector('.popup_type_new-card');
 const newCardCloseButton = newCardPopup.querySelector('.popup__close');
 const cardFormElement = newCardPopup.querySelector('.popup__form');
 const placeNameInput = newCardPopup.querySelector('.popup__input_type_card-name');
 const placeLinkInput = newCardPopup.querySelector('.popup__input_type_url');
-const cardTemplate = document.querySelector('#card-template').content;
-const cardList = document.querySelector('.places__list');
+const cardsList = document.querySelector('.places__list');
 
-// Найти элементы попапа с картинкой
 const imagePopup = document.querySelector('.popup_type_image');
 const popupImage = imagePopup.querySelector('.popup__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
@@ -74,7 +64,7 @@ function handleProfileFormSubmit(event, popup) {
   closeModal(popup);
 }
 
-// Функция создания карточки
+// @todo: Функция создания карточки
 function createCard({ name, link }) {
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   const cardImage = cardElement.querySelector('.card__image');
@@ -90,6 +80,7 @@ function createCard({ name, link }) {
     likeButton.classList.toggle('card__like-button_is-active');
   });
 
+  // @todo: Функция удаления карточки
   deleteButton.addEventListener('click', () => {
     cardElement.remove();
   });
@@ -105,12 +96,11 @@ function createCard({ name, link }) {
   return cardElement;
 }
 
-// Добавление карточки. Используется для:
-// Создания карточки
-// Cоздания карточек из массива
+// @todo: Вывести карточки на страницу 
+// Используется для: Создания карточки и Cоздания карточек из массива
 function addCard(cardData) {
   const cardElement = createCard(cardData);
-  cardList.prepend(cardElement);
+  cardsList.prepend(cardElement);
 }
 
 // Инициализация карточек
@@ -131,21 +121,26 @@ function handleCardFormSubmit(event, popup) {
   closeModal(popup);
 }
 
+function initializeEventListeners() {
+  // Слушатели событий: редактирование профиля
+  editButton.addEventListener('click', () => openModalProfile(profilePopup));
+  profileFormElement.addEventListener('submit', (event) => handleProfileFormSubmit(event, profilePopup));
+  closeButton.addEventListener('click', () => closeModal(profilePopup));
+
+  // Слушатели событий: создание карточки
+  addButton.addEventListener('click', () => openModal(newCardPopup));
+  newCardCloseButton.addEventListener('click', () => closeModal(newCardPopup));
+  cardFormElement.addEventListener('submit', (event) => handleCardFormSubmit(event, newCardPopup));
+
+  // Слушатели событий: открытие карточки
+  imagePopupCloseButton.addEventListener('click', () => closeModal(imagePopup));
+}
+
 // Анимация модальных окон
 animationModal(popups)
 
-// Слушатели событий: редактирование профиля
-editButton.addEventListener('click', () => openModalProfile(profilePopup));
-profileFormElement.addEventListener('submit', (event) => handleProfileFormSubmit(event, profilePopup));
-closeButton.addEventListener('click', () => closeModal(profilePopup));
-
-// Слушатели событий: создание карточки
-addButton.addEventListener('click', () => openModal(newCardPopup));
-newCardCloseButton.addEventListener('click', () => closeModal(newCardPopup));
-cardFormElement.addEventListener('submit', (event) => handleCardFormSubmit(event, newCardPopup));
-
-// Слушатели событий: открытие карточки
-imagePopupCloseButton.addEventListener('click', () => closeModal(imagePopup));
+// Вызов функции для инициализации
+initializeEventListeners();
 
 // Инициализация карточек при загрузке страницы
 renderInitialCards();
